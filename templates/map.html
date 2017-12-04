@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Viewing Map</title>
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.5.0/css/ol.css" type="text/css">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.5.0/build/ol.js"></script>
+  </head>
+  <body>
+    <div id="map" class="map"></div>
+    <script>
+      
+      var mapData = {{mapData}};
+
+      var vectorMap = new ol.source.Vector({
+        features: (new ol.format.GeoJSON()).readFeatures(mapData)
+      });
+
+
+      var bingLayer = new ol.layer.Tile({
+        source: new ol.source.BingMaps({
+          key: 'As-5z225ndQOlSobS6hpMzdYglLxMhqdZF5tYzJNhmyGPxaVRxXWjOvf2GhNvSDu',
+          imagerySet: 'Aerial',
+	  maxZoom: 19
+        })
+      });
+
+      var vectorLayer = new ol.layer.Vector({
+        source: vectorMap,
+      });
+
+      var map = new ol.Map({
+        layers: [
+	  bingLayer,
+          vectorLayer
+        ],
+        target: 'map',
+        controls: ol.control.defaults({
+          attributionOptions: {
+            collapsible: false
+          }
+        }),
+        view: new ol.View({
+    	  projection: 'EPSG:4326',
+          center: [0, 0],
+          zoom: 2
+        })
+      });
+    </script>
+  </body>
+</html>
